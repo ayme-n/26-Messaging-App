@@ -1,92 +1,85 @@
-
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
 
+function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
 
-function Login(){
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-    const [username,Setusername] = useState("")
-    const [password,Setpassword] = useState("")
-    const navigate = useNavigate();
-    const token =  localStorage.getItem("token")
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Login failed: ${text}`);
+      }
 
-    
-    async function handleSubmit(e){
+      const res = await response.json();
 
-    e.preventDefault()
+      localStorage.setItem("token", res.token);
+      localStorage.setItem("username", username);
+      localStorage.setItem("UserID", res.id);
 
-    const respone = await fetch(`${process.env.REACT_APP_API_URL}/login`,{
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        username ,password
-    })
-  })
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
+  }
 
-    const res = await respone.json()
+  if (token && token !== "undefined") return <Navigate to="/" />;
 
-    const token = res.token
+  return (
+    <div className="Login_container">
+      <div className="Login">
+        <h1 id="login-title">Login</h1>
 
+        <form id="login-form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
-    localStorage.setItem('token', token);
-    localStorage.setItem('username', username);
-    localStorage.setItem('UserID', res.id);
+          <br />
 
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-  navigate("/");
-   
-}
+          <br />
 
-    if(token && token !=="undefined")  return <Navigate to={"/"}></Navigate>
+          <input type="submit" value="Login" id="btn-login" />
+        </form>
 
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-    return(
-        <div className="Login_container">
-
-            <div className="Login">
-                
-                <h1 id="login-title">Login</h1>
-
-
-                <div >
-                    <form id="login-form"  onSubmit={handleSubmit}>
-
-
-                    <label htmlFor="username"></label>
-                    <input type="text" name="username" id="username" placeholder="Username"
-                    onChange={(e)=>{
-                        Setusername(e.target.value)
-                    }} 
-                    />
-
-                    <br />
-
-                    <label htmlFor="password"></label>
-                    <input type="password" name="password" id="password"  placeholder="Password"
-                    onChange={(e)=>{
-                        Setpassword(e.target.value)
-                    }} 
-                    />
-
-                    <br />
-
-                    <input type="submit" value={"login"} id="btn-login" />
-
-                    </form>
-                </div>
-
-
-                <div className="create-acc">
-                    <p>Create an account ?  <Link  to="/signin"className="signin-link"> Signin </Link></p>
-                </div>
-
-            </div>
-
+        <div className="create-acc">
+          <p>
+            Create an account? <Link to="/signin" className="signin-link">Sign in</Link>
+          </p>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
 
-export default Login
+export default Login;
