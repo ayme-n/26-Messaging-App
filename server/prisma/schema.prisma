@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User{
+  id Int @id @default(autoincrement())
+  username String @unique
+  password String
+  displayName String @default("User")
+  bio String @default("This is your Bio")
+  image String @default("https://res.cloudinary.com/dhm82i8je/image/upload/v1755205884/Deafult_PFP___davy3k_chivjl.jpg")
+
+  Messages Message[]
+
+  conversationsAsUserOne Conversation[] @relation("UserOneConversations")
+  conversationsAsUserTwo Conversation[] @relation("UserTwoConversations")
+}
+
+model Message{
+  id Int @id @default(autoincrement())
+  text String
+  sent_at DateTime @default(now())
+  ConversationID  Int 
+  Conversation Conversation @relation(fields: [ConversationID],references: [id])
+
+  UserID Int 
+  User User @relation(fields: [UserID],references: [id])
+}
+
+model Conversation{
+  id Int @id @default(autoincrement())
+  USER_ONE User @relation("UserOneConversations", fields: [USER_ONE_ID],references: [id])
+  USER_TWO User @relation("UserTwoConversations" , fields: [USER_TWO_ID],references: [id])
+  USER_ONE_ID Int
+  USER_TWO_ID Int
+  Messages Message[]
+  @@unique([USER_ONE_ID,USER_TWO_ID])
+}
+

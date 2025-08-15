@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "public"."Message" ALTER COLUMN "sent_at" SET DEFAULT CURRENT_TIMESTAMP;
