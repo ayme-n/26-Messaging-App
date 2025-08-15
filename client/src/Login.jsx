@@ -13,20 +13,35 @@ function Login() {
     setError("");
 
     try {
+      // Use env variable with fallback
+      const API_URL = process.env.REACT_APP_API_URL;
+      if (!API_URL) {
+        throw new Error(
+          "API URL is not defined. Make sure REACT_APP_API_URL is set in Vercel or .env.local"
+        );
+      }
 
-        console.log("API URL:", process.env.REACT_APP_API_URL);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+      console.log("Using API URL:", API_URL);
+
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
-      if (!response.ok) {
+      // Handle non-JSON responses safely
+      let res;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        res = await response.json();
+      } else {
         const text = await response.text();
         throw new Error(`Login failed: ${text}`);
       }
 
-      const res = await response.json();
+      if (!response.ok) {
+        throw new Error(`Login failed: ${res.message || "Unknown error"}`);
+      }
 
       localStorage.setItem("token", res.token);
       localStorage.setItem("username", username);
@@ -55,9 +70,7 @@ function Login() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-
           <br />
-
           <input
             type="password"
             name="password"
@@ -66,9 +79,7 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
           <br />
-
           <input type="submit" value="Login" id="btn-login" />
         </form>
 
@@ -76,7 +87,10 @@ function Login() {
 
         <div className="create-acc">
           <p>
-            Create an account? <Link to="/signin" className="signin-link">Sign in</Link>
+            Create an account?{" "}
+            <Link to="/signin" className="signin-link">
+              Sign in
+            </Link>
           </p>
         </div>
       </div>
