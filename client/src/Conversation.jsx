@@ -13,7 +13,7 @@ function Conversation() {
     const { ConversationID } = useParams();
 
     async function getMessages() {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/messages`, {
+        const response = await fetch(`${process.env.VITE_API_URL}/messages`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ ConversationID: parseInt(ConversationID, 10) })
@@ -26,7 +26,7 @@ function Conversation() {
         e.preventDefault();
         if (!text.trim()) return;
 
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/message`, {
+        const response = await fetch(`${process.env.VITE_API_URL}/message`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text, ConversationID, UserID: userID })

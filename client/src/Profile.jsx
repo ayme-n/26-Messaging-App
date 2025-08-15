@@ -22,7 +22,7 @@ function Profile(){
 
     
 
-      const respone  = await fetch(`${process.env.REACT_APP_API_URL}/profile`,{
+      const respone  = await fetch(`${process.env.VITE_API_URL}/profile`,{
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({username})
@@ -53,7 +53,7 @@ function Profile(){
     formData.append("bio", Bio);
     formData.append("image", e.target.image.files[0]);
 
-    const respone = await fetch(`${process.env.REACT_APP_API_URL}/profile`,{
+    const respone = await fetch(`${process.env.VITE_API_URL}/profile`,{
     method: 'put',
     body: formData,
   })
