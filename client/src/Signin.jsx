@@ -7,11 +7,11 @@ function Signin() {
     const [Confirmpassword, setConfirmpassword] = useState("");
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
-
+const API_URL = import.meta.env.VITE_API_URL;
     async function handleSubmit(e) {
         e.preventDefault();
 
-        const response = await fetch(`${process.env.VITE_API_URL}/signin`, {
+        const response = await fetch(`${API_URL}/signin`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

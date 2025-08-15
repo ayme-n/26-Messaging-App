@@ -14,7 +14,7 @@ function Login() {
 
     try {
       // Use env variable with fallback
-      const API_URL = process.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
       if (!API_URL) {
         throw new Error(
           "API URL is not defined. Make sure REACT_APP_API_URL is set in Vercel or .env.local"

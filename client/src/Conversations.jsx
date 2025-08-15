@@ -14,11 +14,12 @@ function Conversations(){
     const token =  localStorage.getItem("token")
     const username = localStorage.getItem("username")
     const UserID = localStorage.getItem("UserID")
+const API_URL = import.meta.env.VITE_API_URL;
 
 
     async function GetConvs(){
 
-        const respone = await fetch(`${process.env.VITE_API_URL}/conversations`,{
+        const respone = await fetch(`${API_URL}/conversations`,{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({username,})

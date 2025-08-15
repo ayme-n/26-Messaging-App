@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Nav from "./Nav";
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 function Dashboard(){
@@ -25,7 +26,7 @@ function Dashboard(){
     async function Set_conv(){
 
 
-        const respone = await fetch(`${process.env.VITE_API_URL}/conversations`,{
+        const respone = await fetch(`${API_URL}/conversations`,{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({username,})
@@ -40,7 +41,7 @@ function Dashboard(){
       async function Set_msgs(){
 
 
-        const respone = await fetch(`${process.env.VITE_API_URL}/messages/all`,{
+        const respone = await fetch(`${API_URL}/messages/all`,{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({UserID:parseInt(UserID,10),})
@@ -57,7 +58,7 @@ function Dashboard(){
 
     
 
-      const respone  = await fetch(`${process.env.VITE_API_URL}/profile`,{
+      const respone  = await fetch(`${API_URL}/profile`,{
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({username})
@@ -74,7 +75,7 @@ function Dashboard(){
       async function GetConvs(){
 
 
-        const respone = await fetch(`${process.env.VITE_API_URL}/conversations`,{
+        const respone = await fetch(`${API_URL}/conversations`,{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({username,})

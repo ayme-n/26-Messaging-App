@@ -16,13 +16,14 @@ function Profile(){
   const [ViewMode,SetMode] = useState(true)
   const token =  localStorage.getItem("token")
   const username = localStorage.getItem("username")
+const API_URL = import.meta.env.VITE_API_URL;
 
     
   async function GetInfos(){
 
     
 
-      const respone  = await fetch(`${process.env.VITE_API_URL}/profile`,{
+      const respone  = await fetch(`${API_URL}/profile`,{
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({username})
@@ -53,7 +54,7 @@ function Profile(){
     formData.append("bio", Bio);
     formData.append("image", e.target.image.files[0]);
 
-    const respone = await fetch(`${process.env.VITE_API_URL}/profile`,{
+    const respone = await fetch(`${API_URL}/profile`,{
     method: 'put',
     body: formData,
   })
