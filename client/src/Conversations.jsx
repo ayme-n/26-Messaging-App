@@ -18,8 +18,7 @@ function Conversations(){
 
     async function GetConvs(){
 
-
-        const respone = await fetch("http://localhost:3000/conversations",{
+        const respone = await fetch(`${process.env.REACT_APP_API_URL}/conversations`,{
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({username,})
